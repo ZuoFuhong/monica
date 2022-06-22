@@ -105,8 +105,7 @@ export default {
           business: '测试应用',
           instance_count: 1,
           ctime: 1655716935,
-          mtime: 1655716949,
-          metadata: {}
+          mtime: 1655716949
         },
         {
           id: 'd990964439b442b8b7adb5e2f15ac6a2',
@@ -115,8 +114,7 @@ export default {
           business: '测试应用2',
           instance_count: 5,
           ctime: 1655716935,
-          mtime: 1655716949,
-          metadata: {}
+          mtime: 1655716949
         }
       ],
       total: 100,
@@ -135,7 +133,11 @@ export default {
     },
     // 查看服务Token
     handlePreview(row) {
+      // Todo: 加载服务Token
       console.log(row)
+      this.$alert('d880964439b442b8b7adb5e2f15ac6a2', '服务 Token', {
+        confirmButtonText: '确定'
+      });
     },
     // 时间格式
     formatTime(row, column, cellValue) {
