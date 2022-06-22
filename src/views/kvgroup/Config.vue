@@ -10,7 +10,7 @@
             <el-input v-model="formInline.kw" placeholder="请输入key过滤" maxlength="30" prefix-icon="el-icon-search"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button icon="el-icon-plus" @click="handleAdd">新增配置</el-button>
+            <el-button icon="el-icon-plus" @click="doAddConfig">新增配置</el-button>
             <el-button icon="el-icon-s-promotion" type="success" @click="handlePublish">发布</el-button>
             <el-button icon="el-icon-back" type="info">回滚</el-button>
           </el-form-item>
@@ -65,9 +65,9 @@
             label="操作"
             width="200">
             <template slot-scope="scope">
-              <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="doEditConfig(scope.row)">编辑</el-button>
               <el-button type="text" size="small" v-if="scope.row.step === 3 || scope.row.step === 4">撤销</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="doDeleteConfig(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -82,6 +82,31 @@
         </el-pagination>
       </el-row>
     </div>
+    <!-- 编辑框 -->
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <el-row>
+        <el-col :span="22">
+          <el-form :model="dialogForm" ref="dialogForm" label-width="100px">
+            <el-form-item label="Key" prop="key" class="is-required">
+              <el-input v-model="dialogForm.key" :disabled="dialogForm.id"></el-input>
+            </el-form-item>
+            <el-form-item label="Value" prop="value" class="is-required">
+              <el-input v-model="dialogForm.value"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="dialogForm.remark"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveConfig">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -151,18 +176,51 @@ export default {
       ],
       total: 100,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
+      // 配置项
+      dialogVisible: false,
+      dialogTitle: '',
+      dialogForm: {
+        id: '',
+        key: '',
+        value: '',
+        remark: '',
+      }
     }
   },
   methods: {
+    doAddConfig() {
+      this.dialogVisible = true
+      this.dialogTitle = '新增配置项'
+      this.dialogForm = {}
+    },
+    // 编辑配置
+    doEditConfig(row) {
+      this.dialogVisible = true
+      this.dialogTitle = '修改配置项'
+      this.dialogForm = {
+        id: row.id,
+        key: row.key,
+        value: row.value,
+        remark: row.remark
+      }
+    },
+    // 保存配置项
+    doSaveConfig() {
+      console.log(this.dialogForm)
+    },
+    // 删除配置项
+    doDeleteConfig(row) {
+      // Todo: 删除配置
+      console.log(row)
+    },
     // 切换分页
     handleCurrentChange(val) {
       // Todo: 分页加载
       console.log(val)
     },
-    // 时间格式
+    // 时间格式化
     formatTime(row, column, cellValue) {
-      // 转毫秒时间戳
       return moment(cellValue * 1000).format("YYYY-MM-DD HH:mm:ss");
     }
   }
