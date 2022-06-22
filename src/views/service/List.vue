@@ -76,6 +76,34 @@
         </el-pagination>
       </el-row>
     </div>
+    <!-- 编辑框 -->
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <el-row>
+        <el-col :span="22">
+          <el-form :model="dialogForm" ref="dialogForm" label-width="100px">
+            <el-form-item label="服务名称" prop="name" class="is-required">
+              <el-input v-model="dialogForm.name"></el-input>
+            </el-form-item>
+            <el-form-item label="业务名称" prop="business" class="is-required">
+              <el-input v-model="dialogForm.business"></el-input>
+            </el-form-item>
+            <el-form-item label="负责人" prop="owners" class="is-required">
+              <el-input v-model="dialogForm.owners"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="dialogForm.remark"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveService">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -114,7 +142,16 @@ export default {
       ],
       total: 100,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
+      // 编辑框
+      dialogVisible: false,
+      dialogTitle: '',
+      dialogForm: {
+        name: '',
+        business: '',
+        owners: '',
+        remark: ''
+      }
     }
   },
   methods: {
@@ -124,18 +161,44 @@ export default {
     },
     // 新建服务
     handleAdd() {
+      this.dialogVisible = true
+      this.dialogTitle = "新建服务"
+      this.dialogForm = {}
     },
     // 编辑服务
     handleEdit(row) {
-      console.log(row)
+      this.dialogVisible = true
+      this.dialogTitle = "编辑服务"
+      this.dialogForm = {
+        name: row.name,
+        business: row.business,
+        owners: row.owners,
+        remark: row.remark
+      }
+    },
+    // 保存提交
+    doSaveService() {
+      // Todo: 保存提交，刷新列表
+      console.log(this.dialogForm)
     },
     // 删除服务
     handleDelete(row) {
-      console.log(row)
+      this.$confirm(`此操作将删除 ${row.name} 服务, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // Todo: 检查使用状态，是否允许删除
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        // cancel delete, nothing to do         
+      });
     },
-    // 时间格式
+    // 时间格式化
     formatTime(row, column, cellValue) {
-      // 转毫秒时间戳
       return moment(cellValue * 1000).format("YYYY-MM-DD HH:mm:ss");
     },
     // 切换分页
