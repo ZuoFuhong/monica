@@ -131,4 +131,7 @@ body {
     padding: 20px;
   }
 }
+.el-input__count {
+  line-height: 20px;
+}
 </style>

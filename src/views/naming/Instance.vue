@@ -89,6 +89,41 @@
         </el-pagination>
       </el-row>
     </div>
+    <!-- 编辑框 -->
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+      width="40%">
+      <el-row>
+        <el-col :span="22">
+          <el-form :model="dialogForm" ref="dialogForm" label-width="100px">
+            <el-form-item label="实例IP" prop="host" class="is-required">
+              <el-input v-model="dialogForm.host" maxlength="20"></el-input>
+            </el-form-item>
+            <el-form-item label="端口" prop="port" class="is-required">
+              <el-input v-model="dialogForm.port" maxlength="5"></el-input>
+            </el-form-item>
+            <el-form-item label="权重" prop="weight" class="is-required">
+              <el-input v-model="dialogForm.weight" maxlength="3"></el-input>
+            </el-form-item>
+            <el-form-item label="是否隔离" prop="isolate" class="is-required">
+              <el-switch
+                v-model="dialogForm.isolate"
+                active-color="#ff4949"
+                inactive-color="#13ce66">
+              </el-switch>
+            </el-form-item>
+            <el-form-item label="元数据" prop="remark">
+              <el-input v-model="dialogForm.metadata" type="textarea" rows="3" placeholder="元数据是服务实例的附加信息，可用于标记实例特征" maxlength="100" show-word-limit></el-input>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="doSaveInstance">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,31 +151,42 @@ export default {
           healthy: true,
           isolate: false,
           host: "192.168.1.1",
-          metadata: {},
           port: 8080,
           service: "test",
           weight: 100,
           ctime: 1655716935,
           mtime: 1655716949,
-          namespace: 'Test'
+          namespace: 'Test',
+          metadata: ''
         },
         {
           id: "7864f48ff4c24c39e4b006cefbfb4b63f0236219",
           healthy: false,
           isolate: true,
           host: "192.168.1.2",
-          metadata: {},
           port: 8080,
           service: "test2",
           weight: 100,
           ctime: 1655716935,
           mtime: 1655716949,
-          namespace: 'Test'
+          namespace: 'Test',
+          metadata: ''
         }
       ],
       total: 100,
       pageSize: 10,
-      currentPage: 1
+      currentPage: 1,
+      // 编辑框
+      dialogVisible: false,
+      dialogTitle: '',
+      dialogForm: {
+        id: "",
+        isolate: false,
+        host: "",
+        metadata: '',
+        port: '',
+        weight: ''
+      }
     }
   },
   methods: {
@@ -150,23 +196,50 @@ export default {
     },
     // 新建实例
     handleAdd() {
+      this.dialogVisible = true
+      this.dialogTitle = '新增服务实例'
+      this.dialogForm = {}
     },
-    // 编辑服务
+    // 编辑实例
     handleEdit(row) {
-      console.log(row)
+      this.dialogVisible = true
+      this.dialogTitle = '编辑服务实例'
+      this.dialogForm = {
+        id: row.id,
+        isolate: row.isolate,
+        host: row.host,
+        port: row.port,
+        weight: row.weight,
+        metadata: row.metadata
+      }
     },
-    // 删除服务
+    // 删除实例
     handleDelete(row) {
-      console.log(row)
+      this.$confirm(`此操作将删除服务实例 ${row.host}:${row.port}, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // Todo: 删除请求
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        // cancel delete, nothing to do         
+      });
+    },
+    // 保存示例
+    doSaveInstance() {
+      
     },
     // 切换分页
     handleCurrentChange(val) {
       // Todo: 分页加载
       console.log(val)
     },
-    // 时间格式
+    // 时间格式化
     formatTime(row, column, cellValue) {
-      // 转毫秒时间戳
       return moment(cellValue * 1000).format("YYYY-MM-DD HH:mm:ss");
     }
   }
