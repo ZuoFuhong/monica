@@ -109,10 +109,11 @@
 
 <script>
 import moment from 'moment';
+import serv from '../../model/service'
 export default {
   name: "AppList",
   created() {
-    console.log("init service page")
+    this.refreshTableList()
   },
   data() {
     return {
@@ -120,26 +121,7 @@ export default {
         serviceName: '',
         businessName: ''
       },
-      serviceList: [
-        {
-          id: 'd990964439b442b8b7adb5e2f15ac6a3',
-          name: 'test',
-          business: '测试应用',
-          owners: 'mars',
-          remark: "123",
-          ctime: 1655716935,
-          mtime: 1655716949
-        },
-        {
-          id: 'd990964439b442b8b7adb5e2f15ac6a2',
-          name: 'test',
-          business: '测试应用2',
-          owners: 'mars',
-          remark: "123",
-          ctime: 1655716935,
-          mtime: 1655716949
-        }
-      ],
+      serviceList: [],
       total: 100,
       pageSize: 10,
       currentPage: 1,
@@ -147,6 +129,7 @@ export default {
       dialogVisible: false,
       dialogTitle: '',
       dialogForm: {
+        id: 0,
         name: '',
         business: '',
         owners: '',
@@ -155,21 +138,24 @@ export default {
     }
   },
   methods: {
-    // 搜索服务
-    handleSearch() {
-      console.log('submit!');
-    },
     // 新建服务
     handleAdd() {
       this.dialogVisible = true
       this.dialogTitle = "新建服务"
-      this.dialogForm = {}
+      this.dialogForm = {
+        id: 0,
+        name: '',
+        business: '',
+        owners: '',
+        remark: ''
+      }
     },
     // 编辑服务
     handleEdit(row) {
       this.dialogVisible = true
       this.dialogTitle = "编辑服务"
       this.dialogForm = {
+        id: row.id,
         name: row.name,
         business: row.business,
         owners: row.owners,
@@ -177,34 +163,70 @@ export default {
       }
     },
     // 保存提交
-    doSaveService() {
-      // Todo: 保存提交，刷新列表
-      console.log(this.dialogForm)
+    async doSaveService() {
+      let form = this.dialogForm
+      let {retcode, errmsg} = await serv.saveService({
+        id: form.id,
+        name: form.name,
+        business: form.business,
+        owners: form.owners,
+        remark: form.remark
+      })
+      if (retcode === 0) {
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        });
+        this.dialogVisible = false
+        this.refreshTableList()
+        return
+      }
+      this.$message.error(errmsg)
     },
-    // 删除服务
-    handleDelete(row) {
-      this.$confirm(`此操作将删除 ${row.name} 服务, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // Todo: 检查使用状态，是否允许删除
+    // 删除记录
+    async handleDelete(row) {
+      let {retcode, errmsg} = await serv.deleteService(row.name)
+      if (retcode === 0) {
         this.$message({
           type: 'success',
           message: '删除成功!'
         });
-      }).catch(() => {
-        // cancel delete, nothing to do         
-      });
+        this.refreshTableList()
+        return
+      }
+      this.$message.error(errmsg)
+    },
+    // 搜索
+    async handleSearch() {
+      let {retcode, errmsg, data} = await serv.searchService({
+        kw: this.formInline.serviceName,
+        busi: this.formInline.businessName,
+        page: this.currentPage,
+        page_size: this.pageSize
+      })
+      if (retcode !== 0) {
+        this.$message.error(errmsg)
+        return
+      }
+      this.serviceList = data.list
+      this.total = data.total
+    },
+    // 切换分页
+    async handleCurrentChange(val) {
+      this.currentPage = val
+      this.handleSearch()
+    },
+    // 刷新列表
+    refreshTableList() {
+      this.currentPage = 1
+      this.handleSearch()
     },
     // 时间格式化
     formatTime(row, column, cellValue) {
+      if (cellValue === 0) {
+        return "-";
+      }
       return moment(cellValue * 1000).format("YYYY-MM-DD HH:mm:ss");
-    },
-    // 切换分页
-    handleCurrentChange(val) {
-      // Todo: 分页加载
-      console.log(val)
     }
   }
 }
