@@ -111,7 +111,7 @@
 import moment from 'moment';
 import serv from '../../model/service'
 export default {
-  name: "AppList",
+  name: "Service",
   created() {
     this.refreshTableList()
   },
