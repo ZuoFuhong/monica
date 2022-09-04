@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"encoding/json"
+	"monica-admin/app/domain/entity"
 	"monica-admin/errcode"
 	"monica-admin/pkg/log"
 	"net/http"
@@ -23,8 +24,25 @@ func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Requ
 		Error(w, errcode.InternalServerError, "查询活动失败")
 		return
 	}
+	svoList := make([]*entity.ServiceVO, 0)
+	for _, sdo := range sList {
+		var mtime int64
+		if sdo.UpdatedAt != nil {
+			mtime = sdo.UpdatedAt.Unix()
+		}
+		svo := &entity.ServiceVO{
+			Id:       sdo.Id,
+			Name:     sdo.Name,
+			Business: sdo.Business,
+			Owners:   sdo.Owners,
+			Remark:   sdo.Remark,
+			Ctime:    sdo.CreatedAt.Unix(),
+			Mtime:    mtime,
+		}
+		svoList = append(svoList, svo)
+	}
 	data := make(map[string]interface{})
-	data["list"] = sList
+	data["list"] = svoList
 	data["total"] = total
 	Ok(w, data)
 }
