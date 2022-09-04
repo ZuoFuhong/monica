@@ -1,0 +1,5 @@
+server:
+  name: monica-admin
+  addr: 127.0.0.1
+  port: 8081
+  domain: http://127.0.0.1:8081

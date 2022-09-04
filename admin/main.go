@@ -1,0 +1,17 @@
+package main
+
+import (
+	"log"
+	"monica-admin/app/interfaces"
+	"monica-admin/web"
+)
+
+func main() {
+	log.SetFlags(log.Lshortfile | log.Ltime | log.Ldate)
+	s := web.NewServer()
+	service := interfaces.InitializeService()
+	s.Register(service)
+	if err := s.Serve(); err != nil {
+		log.Fatal(err)
+	}
+}
