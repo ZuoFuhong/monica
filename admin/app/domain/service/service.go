@@ -44,7 +44,10 @@ func (s *Service) SaveService(ctx context.Context, record *entity.Service) error
 		return s.repos.CreateService(ctx, record)
 	}
 	// 更新服务
-	if servDO.Id != 0 && servDO.Id != record.Id {
+	if servDO.Id == 0 {
+		return errors.New("服务不存在")
+	}
+	if servDO.Id != record.Id {
 		return errors.New("服务名称已占用")
 	}
 	record.UpdatedAt = &now

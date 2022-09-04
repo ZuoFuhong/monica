@@ -8,7 +8,7 @@ import (
 
 // Result 统一的回包结构
 type Result struct {
-	Retcode int         `json:"error_code"`
+	Retcode int         `json:"retcode"`
 	Errmsg  string      `json:"errmsg"`
 	Data    interface{} `json:"data"`
 }
