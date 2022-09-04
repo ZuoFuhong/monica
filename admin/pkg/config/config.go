@@ -29,6 +29,15 @@ type Config struct {
 		Port   int
 		Domain string
 	}
+
+	Db struct {
+		Dsn             string `yaml:"dsn"`
+		MaxIdleConns    int    `yaml:"max_idle_conns"`
+		MaxOpenConns    int    `yaml:"max_open_conns"`
+		ConnMaxLifetime int    `yaml:"conn_max_lifetime"`
+		LogLevel        int    `yaml:"log_level"`
+		SlowThreshold   int    `yaml:"slow_threshold"`
+	}
 }
 
 var globalConfig atomic.Value

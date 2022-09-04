@@ -8,7 +8,7 @@ import (
 
 // Result 统一的回包结构
 type Result struct {
-	BizCode int         `json:"bizCode"`
+	Retcode int         `json:"error_code"`
 	Errmsg  string      `json:"errmsg"`
 	Data    interface{} `json:"data"`
 }
@@ -24,7 +24,7 @@ func Ok(w http.ResponseWriter, data interface{}) {
 // Error 响应
 func Error(w http.ResponseWriter, errcode int, errmsg string) {
 	result := &Result{
-		BizCode: errcode,
+		Retcode: errcode,
 		Errmsg:  errmsg,
 	}
 	writeToResponse(w, result)

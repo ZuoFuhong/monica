@@ -22,4 +22,7 @@ func NewRouter() *Router {
 
 func (r *Router) registerHandler(s *interfaces.AdminHttpServiceImpl) {
 	r.Handle("/ping", r.ch.ThenFunc(s.Ping)).Methods("GET")
+	r.Handle("/api/v1/services", r.ch.ThenFunc(s.DoServiceList)).Methods("GET")
+	r.Handle("/api/v1/service", r.ch.ThenFunc(s.DoSaveService)).Methods("POST")
+	r.Handle("/api/v1/service", r.ch.ThenFunc(s.DoDeleteService)).Methods("DELETE")
 }
