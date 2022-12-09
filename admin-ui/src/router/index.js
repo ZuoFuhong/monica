@@ -8,6 +8,10 @@ import KvGroup from '../views/kvgroup/List.vue'
 import KvGroupConfig from '../views/kvgroup/Config.vue'
 
 Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
 
 const routes = [
   {
@@ -39,10 +43,6 @@ const routes = [
     path: '/kvgroup/:ns/:name',
     name: 'KvGroupConfig',
     component: KvGroupConfig
-  },
-  {
-    path: '*',
-    redirect: '/'
   }
 ]
 

@@ -1,4 +1,4 @@
-# monica-portal
+# admin-ui
 
 ## Project setup
 ```

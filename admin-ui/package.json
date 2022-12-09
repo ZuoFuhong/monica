@@ -1,9 +1,9 @@
 {
-  "name": "monica-portal",
+  "name": "admin-ui",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --host localhost",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -13,6 +13,7 @@
     "element-ui": "^2.4.5",
     "js-base64": "^3.7.2",
     "moment": "^2.29.3",
+    "portfinder": "1.0.21",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
