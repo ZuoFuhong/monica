@@ -82,3 +82,25 @@ func (s *AdminHttpServiceImpl) DoDeleteService(w http.ResponseWriter, r *http.Re
 	}
 	Ok(w, "ok")
 }
+
+// DoServiceNamespaceList 管理后台-服务命名空间
+func (s *AdminHttpServiceImpl) DoServiceNamespaceList(w http.ResponseWriter, r *http.Request) {
+	// 1.解析参数
+	query := r.URL.Query().Get("query")
+	cond, err := parseSearchNSReq(query)
+	if err != nil {
+		log.ErrorContextf(r.Context(), "call parseSearchReq failed, query = %s, err: %v", query, err)
+		Error(w, errcode.BadRequestParam, "参数解析失败")
+		return
+	}
+	// 2.查询服务命名空间
+	nsList, total, err := s.serv.ListServiceNSByPage(r.Context(), cond.Kw, cond.IP, cond.Page, cond.PageSize)
+	if err != nil {
+		Error(w, errcode.InternalServerError, err.Error())
+		return
+	}
+	data := make(map[string]interface{})
+	data["list"] = nsList
+	data["total"] = total
+	Ok(w, data)
+}

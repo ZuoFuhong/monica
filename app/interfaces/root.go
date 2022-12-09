@@ -15,7 +15,7 @@ type AdminHttpServiceImpl struct {
 func InitializeService(db *gorm.DB) *AdminHttpServiceImpl {
 	servrepos := database.NewIServiceRepos(db)
 	insRepos := database.NewIServiceInstanceRepos(db)
-	serv := service.NewService(servrepos)
+	serv := service.NewService(servrepos, insRepos)
 	insv := service.NewServiceInstance(servrepos, insRepos)
 	return &AdminHttpServiceImpl{
 		serv: serv,
