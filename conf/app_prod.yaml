@@ -1,0 +1,13 @@
+server:
+  name: monica
+  addr: 127.0.0.1
+  port: 8081
+  domain: http://127.0.0.1:8081
+
+db:
+  dsn: root:123456@tcp(127.0.0.1:3306)/monica?charset=utf8mb4&parseTime=true&loc=Local&timeout=5s
+  max_idle_conns: 10
+  max_open_conns: 100
+  conn_max_lifetime: 1800
+  log_level: 3
+  slow_threshold: 100
