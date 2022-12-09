@@ -25,4 +25,7 @@ func (r *Router) registerHandler(s *interfaces.AdminHttpServiceImpl) {
 	r.Handle("/api/v1/services", r.ch.ThenFunc(s.DoServiceList)).Methods("GET")
 	r.Handle("/api/v1/service", r.ch.ThenFunc(s.DoSaveService)).Methods("POST")
 	r.Handle("/api/v1/service", r.ch.ThenFunc(s.DoDeleteService)).Methods("DELETE")
+	r.Handle("/api/v1/service_instances", r.ch.ThenFunc(s.DoServiceInstanceList)).Methods("GET")
+	r.Handle("/api/v1/service_instance", r.ch.ThenFunc(s.DoSaveServiceInstance)).Methods("POST")
+	r.Handle("/api/v1/service_instance", r.ch.ThenFunc(s.DoDeleteServiceInstance)).Methods("DELETE")
 }

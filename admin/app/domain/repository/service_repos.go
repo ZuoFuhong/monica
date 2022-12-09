@@ -10,6 +10,9 @@ type IServiceRepos interface {
 	// CreateService 创建服务
 	CreateService(ctx context.Context, record *entity.Service) error
 
+	// GetServiceByID 通过 ID 查询服务
+	GetServiceByID(ctx context.Context, sid int) (*entity.Service, error)
+
 	// GetServiceByName 通过名称查询服务
 	GetServiceByName(ctx context.Context, name string) (*entity.Service, error)
 

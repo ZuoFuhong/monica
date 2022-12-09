@@ -21,7 +21,7 @@ func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Requ
 	// 2.分页查询
 	sList, total, err := s.serv.ListServiceByPage(r.Context(), cond.Kw, cond.Busi, cond.Page, cond.PageSize)
 	if err != nil {
-		Error(w, errcode.InternalServerError, "查询活动失败")
+		Error(w, errcode.InternalServerError, err.Error())
 		return
 	}
 	svoList := make([]*entity.ServiceVO, 0)
@@ -31,7 +31,7 @@ func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Requ
 			mtime = sdo.UpdatedAt.Unix()
 		}
 		svo := &entity.ServiceVO{
-			Id:       sdo.Id,
+			Id:       sdo.ID,
 			Name:     sdo.Name,
 			Business: sdo.Business,
 			Owners:   sdo.Owners,
@@ -50,7 +50,7 @@ func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Requ
 // DoSaveService 管理后台-创建/修改 服务
 func (s *AdminHttpServiceImpl) DoSaveService(w http.ResponseWriter, r *http.Request) {
 	req := new(SaveServiceReq)
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		log.ErrorContextf(r.Context(), "call json.Decode failed, err: %v", err)
 		Error(w, errcode.BadRequestParam, "参数解析失败")
 		return
@@ -61,8 +61,7 @@ func (s *AdminHttpServiceImpl) DoSaveService(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	// 2.保存服务
-	err := s.serv.SaveService(r.Context(), req.convertToEntity())
-	if err != nil {
+	if err := s.serv.SaveService(r.Context(), req.convertToEntity()); err != nil {
 		Error(w, errcode.InternalServerError, err.Error())
 		return
 	}

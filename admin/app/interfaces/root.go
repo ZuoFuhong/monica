@@ -9,13 +9,17 @@ import (
 
 type AdminHttpServiceImpl struct {
 	serv service.IService
+	insv service.IServiceInstance
 }
 
 func InitializeService(db *gorm.DB) *AdminHttpServiceImpl {
-	repos := database.NewIServiceRepos(db)
-	serv := service.NewService(repos)
+	servrepos := database.NewIServiceRepos(db)
+	insRepos := database.NewIServiceInstanceRepos(db)
+	serv := service.NewService(servrepos)
+	insv := service.NewServiceInstance(servrepos, insRepos)
 	return &AdminHttpServiceImpl{
 		serv: serv,
+		insv: insv,
 	}
 }
 

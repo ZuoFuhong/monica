@@ -34,23 +34,20 @@ func (s *Service) SaveService(ctx context.Context, record *entity.Service) error
 	if err != nil {
 		return err
 	}
-	now := time.Now()
 	// 新增服务
-	if record.Id == 0 {
-		if servDO.Id != 0 {
+	if record.ID == 0 {
+		if servDO.ID != 0 {
 			return errors.New("服务名称已占用")
 		}
-		record.CreatedAt = &now
 		return s.repos.CreateService(ctx, record)
 	}
 	// 更新服务
-	if servDO.Id == 0 {
+	if servDO.ID == 0 {
 		return errors.New("服务不存在")
 	}
-	if servDO.Id != record.Id {
+	if servDO.ID != record.ID {
 		return errors.New("服务名称已占用")
 	}
-	record.UpdatedAt = &now
 	return s.repos.UpdateService(ctx, record)
 }
 
@@ -72,7 +69,7 @@ func (s *Service) DeleteService(ctx context.Context, name string) error {
 	if err != nil {
 		return err
 	}
-	if serv.Id == 0 {
+	if serv.ID == 0 {
 		return errors.New("服务不存在")
 	}
 	// 标记删除

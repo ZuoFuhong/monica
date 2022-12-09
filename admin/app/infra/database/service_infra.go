@@ -26,18 +26,28 @@ func (s *ServiceRepos) CreateService(ctx context.Context, record *entity.Service
 	return nil
 }
 
+// GetServiceByID 通过 ID 查询服务
+func (s *ServiceRepos) GetServiceByID(ctx context.Context, sid int) (*entity.Service, error) {
+	serv := new(entity.Service)
+	if err := s.db.Where("id = ? AND deleted_at is null", sid).Find(serv).Error; err != nil {
+		log.ErrorContextf(ctx, "call db.Find failed, err: %v", err)
+		return nil, err
+	}
+	return serv, nil
+}
+
 // GetServiceByName 通过名称查询服务
 func (s *ServiceRepos) GetServiceByName(ctx context.Context, name string) (*entity.Service, error) {
 	serv := new(entity.Service)
-	if err := s.db.Where("name = ? AND deleted_at is null", name).Find(&serv).Error; err != nil {
-		log.ErrorContextf(ctx, "call db.Take failed, err: %v", err)
+	if err := s.db.Where("name = ? AND deleted_at is null", name).Find(serv).Error; err != nil {
+		log.ErrorContextf(ctx, "call db.Find failed, err: %v", err)
 		return nil, err
 	}
 	return serv, nil
 }
 
 func (s *ServiceRepos) UpdateService(ctx context.Context, record *entity.Service) error {
-	if err := s.db.Where("id = ? AND deleted_at is null", record.Id).Updates(record).Error; err != nil {
+	if err := s.db.Where("id = ? AND deleted_at is null", record.ID).Updates(record).Error; err != nil {
 		log.ErrorContextf(ctx, "call db.Updates failed, err: %v", err)
 		return err
 	}
