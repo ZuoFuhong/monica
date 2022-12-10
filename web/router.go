@@ -49,7 +49,7 @@ func vueRouter(prefix string, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p := strings.TrimPrefix(r.URL.Path, prefix)
 		// 适配 Vue 路由
-		if !strings.HasPrefix(p, "api/") {
+		if strings.HasPrefix(p, "service") || strings.HasPrefix(p, "naming-service") || strings.HasPrefix(p, "kvgroup") {
 			p = ""
 		}
 		rp := strings.TrimPrefix(r.URL.RawPath, prefix)
