@@ -1,5 +1,19 @@
 ## Monica 服务治理平台
 
+Monica 是一个集成动态服务发现、配置管理和服务管理的服务基础设施，帮助您快速实现动态服务发现、服务配置、服务元数据及流量管理。
+
+![Service-Register-Discovery.jpg](./docs/Service-Register-Discovery.jpg)
+
+### 快速开始
+
+启动服务前先初始化 MySQL 数据库，建表脚本在 docs/monica_ddl.sql 中，DB 配置在 app.yaml 文件中。在 **dist** 目录中已经有 **admin-ui** 最新打包的页面，可以省去 nodejs 的环境安装：
+
+```shell
+go run main.go
+```
+
+服务启动后，默认运行在 1024 端口，可以修改 app.yaml 更改配置。
+
 ### 服务注册/发现
 
 1.服务注册
