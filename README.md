@@ -5,7 +5,7 @@
 1.服务注册
 
 ```shell
-curl --location --request POST 'http://127.0.0.1:8081/api/v1/register' \
+curl --location --request POST 'http://127.0.0.1:1024/api/v1/register' \
 --header 'Content-Type: application/json' \
 --data '{
     "token": "18ee7064-3cdd-4ed5-a139-fd8d9add5847",
@@ -20,10 +20,10 @@ curl --location --request POST 'http://127.0.0.1:8081/api/v1/register' \
 }'
 ```
 
-2.服务实例更新
+2.服务更新
 
 ```shell
-curl --location --request POST 'http://127.0.0.1:8081/api/v1/renew' \
+curl --location --request POST 'http://127.0.0.1:1024/api/v1/renew' \
 --header 'Content-Type: application/json' \
 --data '{
     "token": "18ee7064-3cdd-4ed5-a139-fd8d9add5847",
@@ -33,10 +33,10 @@ curl --location --request POST 'http://127.0.0.1:8081/api/v1/renew' \
 }'
 ```
 
-3.服务实例注销
+3.服务注销
 
 ```shell
-curl --location --request POST 'http://127.0.0.1:8081/api/v1/cancel' \
+curl --location --request POST 'http://127.0.0.1:1024/api/v1/deregister' \
 --header 'Content-Type: application/json' \
 --data '{
     "token": "18ee7064-3cdd-4ed5-a139-fd8d9add5847",
@@ -49,7 +49,7 @@ curl --location --request POST 'http://127.0.0.1:8081/api/v1/cancel' \
 4.获取服务实例
 
 ```shell
-curl --location --request GET 'http://127.0.0.1:8081/api/v1/fetch?ns=Test&sname=go_wallet_manage_svr'
+curl --location --request GET 'http://127.0.0.1:1024/api/v1/fetch?ns=Test&sname=go_wallet_manage_svr'
 ```
 
 Response:
@@ -72,7 +72,7 @@ Response:
 5.获取服务实例（长轮询）
 
 ```shell
-curl --location --request GET 'http://127.0.0.1:8081/api/v1/poll?ns=Test&sname=go_wallet_manage_svr'
+curl --location --request GET 'http://127.0.0.1:1024/api/v1/poll?ns=Test&sname=go_wallet_manage_svr'
 ```
 
 Response: 
@@ -119,4 +119,3 @@ docker build -t ccr.ccs.tencentyun.com/tcb-xxx-xupz/prod-xxx-online:[tag] .
 # 推送镜像
 docker push ccr.ccs.tencentyun.com/tcb-xxx-xupz/prod-xxxx-online:[tag]
 ```
-
