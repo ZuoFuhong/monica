@@ -13,7 +13,7 @@ curl --location --request POST 'http://127.0.0.1:1024/api/v1/register' \
     "service_name": "go_wallet_manage_svr",
     "node": {
       "ip": "127.0.0.1",
-      "port": 1024,
+      "port": 1025,
       "weight": 100,
       "metadata": "[]"
     }
@@ -61,7 +61,7 @@ Response:
     "data": [
         {
             "ip": "127.0.0.1",
-            "port": 1024,
+            "port": 1025,
             "weight": 100,
             "metadata": "[]"
         }
@@ -84,7 +84,7 @@ Response:
     "data": [
         {
             "ip": "127.0.0.1",
-            "port": 1024,
+            "port": 1025,
             "weight": 100,
             "metadata": "[]"
         }

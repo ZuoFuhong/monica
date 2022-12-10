@@ -57,7 +57,11 @@ func (s *Instance) SaveInstance(ctx context.Context, ins *entity.ServiceInstance
 	if ins.ID != insDO.ID {
 		return errors.New("实例IP已存在")
 	}
-	return s.repos.UpdateInstance(ctx, ins)
+	// 更新字段
+	insDO.Isolate = ins.Isolate
+	insDO.Weight = ins.Weight
+	insDO.Metadata = ins.Metadata
+	return s.repos.UpdateInstance(ctx, insDO)
 }
 
 func (s *Instance) ListInstanceByPage(ctx context.Context, ns, serviceName string, ip string, port, page, pageSize int) ([]*entity.ServiceInstance, int64, error) {

@@ -145,6 +145,9 @@ func (r *RegisterReq) CheckRequiredParam() bool {
 	if r.Node.IP == "" {
 		return false
 	}
+	if r.Node.Weight < 0 || r.Node.Weight > 100 {
+		return false
+	}
 	return true
 }
 

@@ -46,7 +46,9 @@ func (s *RegisterService) Register(ctx context.Context, ns, sname string, insNod
 		}
 		return s.repos.CreateInstance(ctx, ins)
 	}
-	// 更新
+	// 服务更新
+	ins.Weight = insNode.Weight
+	ins.Metadata = insNode.Metadata
 	ins.RenewedAt = &now
 	return s.repos.UpdateInstance(ctx, ins)
 }
