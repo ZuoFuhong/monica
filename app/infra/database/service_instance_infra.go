@@ -35,6 +35,15 @@ func (s *ServiceInstanceRepos) GetInstanceByIP(ctx context.Context, ns, serviceN
 	return ins, nil
 }
 
+func (s *ServiceInstanceRepos) GetAllInstance(ctx context.Context, ns, sname string) ([]*entity.ServiceInstance, error) {
+	insList := make([]*entity.ServiceInstance, 0)
+	if err := s.db.Where("namespace = ? AND service_name = ? AND deleted_at is null", ns, sname).Find(&insList).Error; err != nil {
+		log.ErrorContextf(ctx, "call db.Find failed, err: %v", err)
+		return nil, err
+	}
+	return insList, nil
+}
+
 func (s *ServiceInstanceRepos) UpdateInstance(ctx context.Context, ins *entity.ServiceInstance) error {
 	if err := s.db.Where("id = ? AND deleted_at is null", ins.ID).Updates(ins).Error; err != nil {
 		log.ErrorContextf(ctx, "call db.Update failed, err: %v", err)

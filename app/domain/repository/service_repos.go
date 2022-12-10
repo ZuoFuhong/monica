@@ -33,4 +33,7 @@ type IServiceRepos interface {
 
 	// CountServiceNSByCond 分页查询-服务命名空间数量
 	CountServiceNSByCond(ctx context.Context, kw, ip string) (int64, error)
+
+	// GetServiceNSByName 查询服务命名空间
+	GetServiceNSByName(ctx context.Context, ns, sname string) (*entity.ServiceNamespace, error)
 }

@@ -3,13 +3,15 @@ package interfaces
 import (
 	"encoding/json"
 	"monica/app/domain/entity"
+	"monica/consts"
 	"monica/errcode"
 	"monica/pkg/log"
 	"net/http"
+	"time"
 )
 
 // DoServiceInstanceList 管理后台-服务实例列表
-func (s *AdminHttpServiceImpl) DoServiceInstanceList(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoServiceInstanceList(w http.ResponseWriter, r *http.Request) {
 	// 1.解析参数
 	query := r.URL.Query().Get("query")
 	cond, err := parseSearchInsReq(query)
@@ -25,12 +27,13 @@ func (s *AdminHttpServiceImpl) DoServiceInstanceList(w http.ResponseWriter, r *h
 		return
 	}
 	voList := make([]*entity.InstanceVO, 0)
+	now := time.Now()
 	for _, ins := range sList {
 		insVO := &entity.InstanceVO{
 			ID:          ins.ID,
 			Namespace:   ins.Namespace,
 			ServiceName: ins.ServiceName,
-			Healthy:     ins.Healthy,
+			Healthy:     consts.Critical,
 			Isolate:     ins.Isolate,
 			IP:          ins.IP,
 			Port:        ins.Port,
@@ -38,6 +41,10 @@ func (s *AdminHttpServiceImpl) DoServiceInstanceList(w http.ResponseWriter, r *h
 			Metadata:    ins.Metadata,
 			Ctime:       ins.CreatedAt.Unix(),
 			Mtime:       ins.UpdatedAt.Unix(),
+		}
+		// 计算健康状态
+		if ins.RenewedAt != nil && ins.RenewedAt.Unix()+consts.SyncNSInterval > now.Unix() {
+			insVO.Healthy = consts.Passing
 		}
 		voList = append(voList, insVO)
 	}
@@ -48,7 +55,7 @@ func (s *AdminHttpServiceImpl) DoServiceInstanceList(w http.ResponseWriter, r *h
 }
 
 // DoSaveServiceInstance 管理后台-创建/修改 服务实例
-func (s *AdminHttpServiceImpl) DoSaveServiceInstance(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoSaveServiceInstance(w http.ResponseWriter, r *http.Request) {
 	req := new(SaveInstanceReq)
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		log.ErrorContextf(r.Context(), "call json.Decode failed, err: %v", err)
@@ -69,7 +76,7 @@ func (s *AdminHttpServiceImpl) DoSaveServiceInstance(w http.ResponseWriter, r *h
 }
 
 // DoDeleteServiceInstance 管理后台-删除服务实例
-func (s *AdminHttpServiceImpl) DoDeleteServiceInstance(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoDeleteServiceInstance(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	ns := query.Get("ns")
 	ip := query.Get("ip")

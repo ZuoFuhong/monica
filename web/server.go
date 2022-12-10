@@ -28,7 +28,7 @@ func NewServer() *Server {
 	}
 }
 
-func (s *Server) Register(service *interfaces.AdminHttpServiceImpl) {
+func (s *Server) Register(service *interfaces.MonicaHttpServiceImpl) {
 	s.router.registerHandler(service)
 }
 

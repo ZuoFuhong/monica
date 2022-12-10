@@ -7,22 +7,28 @@ import (
 	"net/http"
 )
 
-type AdminHttpServiceImpl struct {
+type MonicaHttpServiceImpl struct {
 	serv service.IService
 	insv service.IServiceInstance
+	disv service.IDiscoveryService
+	resv service.IRegisterService
 }
 
-func InitializeService(db *gorm.DB) *AdminHttpServiceImpl {
+func InitializeService(db *gorm.DB) *MonicaHttpServiceImpl {
 	servrepos := database.NewIServiceRepos(db)
 	insRepos := database.NewIServiceInstanceRepos(db)
 	serv := service.NewService(servrepos, insRepos)
 	insv := service.NewServiceInstance(servrepos, insRepos)
-	return &AdminHttpServiceImpl{
+	resv := service.NewRegisterService(insRepos)
+	disv := service.NewDiscoveryService(insRepos)
+	return &MonicaHttpServiceImpl{
 		serv: serv,
 		insv: insv,
+		disv: disv,
+		resv: resv,
 	}
 }
 
-func (s *AdminHttpServiceImpl) Ping(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) Ping(w http.ResponseWriter, r *http.Request) {
 	Ok(w, "ok")
 }

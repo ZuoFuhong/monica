@@ -9,7 +9,7 @@ import (
 )
 
 // DoServiceList 管理后台-服务列表
-func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Request) {
 	// 1.解析参数
 	query := r.URL.Query().Get("query")
 	cond, err := parseSearchReq(query)
@@ -48,7 +48,7 @@ func (s *AdminHttpServiceImpl) DoServiceList(w http.ResponseWriter, r *http.Requ
 }
 
 // DoSaveService 管理后台-创建/修改 服务
-func (s *AdminHttpServiceImpl) DoSaveService(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoSaveService(w http.ResponseWriter, r *http.Request) {
 	req := new(SaveServiceReq)
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		log.ErrorContextf(r.Context(), "call json.Decode failed, err: %v", err)
@@ -70,7 +70,7 @@ func (s *AdminHttpServiceImpl) DoSaveService(w http.ResponseWriter, r *http.Requ
 }
 
 // DoDeleteService 管理后台-删除服务
-func (s *AdminHttpServiceImpl) DoDeleteService(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoDeleteService(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 	if name == "" {
 		Error(w, errcode.BadRequestParam, "无效的参数")
@@ -84,7 +84,7 @@ func (s *AdminHttpServiceImpl) DoDeleteService(w http.ResponseWriter, r *http.Re
 }
 
 // DoServiceNamespaceList 管理后台-服务命名空间
-func (s *AdminHttpServiceImpl) DoServiceNamespaceList(w http.ResponseWriter, r *http.Request) {
+func (s *MonicaHttpServiceImpl) DoServiceNamespaceList(w http.ResponseWriter, r *http.Request) {
 	// 1.解析参数
 	query := r.URL.Query().Get("query")
 	cond, err := parseSearchNSReq(query)

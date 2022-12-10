@@ -88,7 +88,7 @@ func (s *ServiceRepos) BatchAddServiceNS(ctx context.Context, nsList []*entity.S
 }
 
 func (s *ServiceRepos) ListServiceNSByPage(ctx context.Context, kw, ip string, page, pageSize int) ([]*entity.ServiceNamespace, error) {
-	tx := s.db.Table("t_service_namespace").Where("service_name like ?", "%"+kw+"%")
+	tx := s.db.Table("t_service_namespace").Where("service_name like ? AND deleted_at is null", "%"+kw+"%")
 	if ip != "" {
 		tx = s.db.Table("t_service_namespace sn").Select("sn.*").Where("sn.service_name like ? AND sn.deleted_at is null AND ins.ip = ?", "%"+kw+"%", ip).
 			Joins("INNER JOIN t_service_instance as ins ON ins.service_name = sn.service_name AND ins.namespace = sn.namespace")
@@ -102,7 +102,7 @@ func (s *ServiceRepos) ListServiceNSByPage(ctx context.Context, kw, ip string, p
 }
 
 func (s *ServiceRepos) CountServiceNSByCond(ctx context.Context, kw, ip string) (int64, error) {
-	tx := s.db.Table("t_service_namespace").Select("count(*)").Where("service_name like ?", "%"+kw+"%")
+	tx := s.db.Table("t_service_namespace").Select("count(*)").Where("service_name like ? AND deleted_at is null", "%"+kw+"%")
 	if ip != "" {
 		tx = s.db.Table("t_service_namespace sn").Select("count(*)").Where("sn.service_name like ? AND sn.deleted_at is null AND ins.ip = ?", "%"+kw+"%", ip).
 			Joins("INNER JOIN t_service_instance as ins ON ins.service_name = sn.service_name AND ins.namespace = sn.namespace")
@@ -113,4 +113,14 @@ func (s *ServiceRepos) CountServiceNSByCond(ctx context.Context, kw, ip string) 
 		return 0, err
 	}
 	return total, nil
+}
+
+// GetServiceNSByName 查询服务命名空间
+func (s *ServiceRepos) GetServiceNSByName(ctx context.Context, ns, sname string) (*entity.ServiceNamespace, error) {
+	sns := new(entity.ServiceNamespace)
+	if err := s.db.Where("namespace = ? AND service_name = ? AND deleted_at is null", ns, sname).Find(sns).Error; err != nil {
+		log.ErrorContextf(ctx, "call db.Find failed, err: %v", err)
+		return nil, err
+	}
+	return sns, nil
 }

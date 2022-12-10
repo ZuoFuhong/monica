@@ -23,7 +23,7 @@ func NewRouter() *Router {
 	}
 }
 
-func (r *Router) registerHandler(s *interfaces.AdminHttpServiceImpl) {
+func (r *Router) registerHandler(s *interfaces.MonicaHttpServiceImpl) {
 	r.Handle("/ping", r.ch.ThenFunc(s.Ping)).Methods("GET")
 	r.Handle("/api/v1/services", r.ch.ThenFunc(s.DoServiceList)).Methods("GET")
 	r.Handle("/api/v1/service", r.ch.ThenFunc(s.DoSaveService)).Methods("POST")
@@ -32,7 +32,12 @@ func (r *Router) registerHandler(s *interfaces.AdminHttpServiceImpl) {
 	r.Handle("/api/v1/service_instances", r.ch.ThenFunc(s.DoServiceInstanceList)).Methods("GET")
 	r.Handle("/api/v1/service_instance", r.ch.ThenFunc(s.DoSaveServiceInstance)).Methods("POST")
 	r.Handle("/api/v1/service_instance", r.ch.ThenFunc(s.DoDeleteServiceInstance)).Methods("DELETE")
-
+	// 服务注册/发现
+	r.Handle("/api/v1/register", r.ch.ThenFunc(s.Register)).Methods("POST")
+	r.Handle("/api/v1/renew", r.ch.ThenFunc(s.Renew)).Methods("POST")
+	r.Handle("/api/v1/cancel", r.ch.ThenFunc(s.Cancel)).Methods("POST")
+	r.Handle("/api/v1/fetch", r.ch.ThenFunc(s.Fetch)).Methods("GET")
+	r.Handle("/api/v1/poll", r.ch.ThenFunc(s.Poll)).Methods("GET")
 	// 静态资源
 	r.PathPrefix("/").Handler(vueRouter("/", http.FileServer(http.Dir("./dist"))))
 }

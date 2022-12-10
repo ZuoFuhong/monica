@@ -22,6 +22,9 @@ type IService interface {
 
 	// ListServiceNSByPage 查询服务命名空间
 	ListServiceNSByPage(ctx context.Context, kw, ip string, page, pageSize int) ([]*entity.ServiceNSVO, int64, error)
+
+	// VerifyServiceToken 服务注册鉴权
+	VerifyServiceToken(ctx context.Context, token, ns, serviceName string) error
 }
 
 type Service struct {
@@ -156,4 +159,18 @@ func (s *Service) ListServiceNSByPage(ctx context.Context, kw, ip string, page, 
 		nsvoList = append(nsvoList, nsvo)
 	}
 	return nsvoList, total, nil
+}
+
+func (s *Service) VerifyServiceToken(ctx context.Context, token, ns, serviceName string) error {
+	sns, err := s.repos.GetServiceNSByName(ctx, ns, serviceName)
+	if err != nil {
+		return err
+	}
+	if sns.ID == 0 {
+		return errors.New("not found service namespace")
+	}
+	if sns.Token != token {
+		return errors.New("无效的 Token 令牌")
+	}
+	return nil
 }

@@ -28,6 +28,14 @@ type InstanceVO struct {
 	Port        int    `json:"port"`         // 端口
 	Weight      int    `json:"weight"`       // 权重
 	Metadata    string `json:"metadata"`     // 元数据
+	Rtime       int64  `json:"rtime"`        // 健康更新时间
 	Ctime       int64  `json:"ctime"`        // 创建时间
 	Mtime       int64  `json:"mtime"`        // 更新时间
+}
+
+type InstanceNode struct {
+	IP       string `json:"ip"`       // 实例IP
+	Port     int    `json:"port"`     // 端口
+	Weight   int    `json:"weight"`   // 权重
+	Metadata string `json:"metadata"` // 元数据
 }

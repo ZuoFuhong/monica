@@ -129,3 +129,51 @@ func (r *SaveInstanceReq) convertToEntity() *entity.ServiceInstance {
 		Metadata:    r.Metadata,
 	}
 }
+
+// RegisterReq 服务注册
+type RegisterReq struct {
+	Token       string               `json:"token"`        // Token 令牌
+	Namespace   string               `json:"namespace"`    // 命名空间
+	ServiceName string               `json:"service_name"` // 服务名称
+	Node        *entity.InstanceNode `json:"node"`         // 实例节点
+}
+
+func (r *RegisterReq) CheckRequiredParam() bool {
+	if r.Token == "" || r.Namespace == "" || r.ServiceName == "" || r.Node == nil {
+		return false
+	}
+	if r.Node.IP == "" {
+		return false
+	}
+	return true
+}
+
+// RenewReq 更新实例
+type RenewReq struct {
+	Token       string `json:"token"`        // Token 令牌
+	Namespace   string `json:"namespace"`    // 命名空间
+	ServiceName string `json:"service_name"` // 服务名称
+	IP          string `json:"ip"`           // 实例IP
+}
+
+func (r *RenewReq) CheckRequiredParam() bool {
+	if r.Token == "" || r.Namespace == "" || r.ServiceName == "" || r.IP == "" {
+		return false
+	}
+	return true
+}
+
+// CancelReq 注销实例
+type CancelReq struct {
+	Token       string `json:"token"`        // Token 令牌
+	Namespace   string `json:"namespace"`    // 命名空间
+	ServiceName string `json:"service_name"` // 服务名称
+	IP          string `json:"ip"`           // 实例IP
+}
+
+func (r *CancelReq) CheckRequiredParam() bool {
+	if r.Token == "" || r.Namespace == "" || r.ServiceName == "" || r.IP == "" {
+		return false
+	}
+	return true
+}
