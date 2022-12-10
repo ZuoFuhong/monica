@@ -14,7 +14,7 @@ type IRegisterService interface {
 
 	Renew(ctx context.Context, ns, sname, ip string) error
 
-	Cancel(ctx context.Context, ns, sname, ip string) error
+	Deregister(ctx context.Context, ns, sname, ip string) error
 }
 
 type RegisterService struct {
@@ -64,7 +64,7 @@ func (s *RegisterService) Renew(ctx context.Context, ns, sname, ip string) error
 	return s.repos.UpdateInstance(ctx, ins)
 }
 
-func (s *RegisterService) Cancel(ctx context.Context, ns, sname, ip string) error {
+func (s *RegisterService) Deregister(ctx context.Context, ns, sname, ip string) error {
 	ins, err := s.repos.GetInstanceByIP(ctx, ns, sname, ip)
 	if err != nil {
 		return err

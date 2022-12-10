@@ -35,7 +35,7 @@ func (r *Router) registerHandler(s *interfaces.MonicaHttpServiceImpl) {
 	// 服务注册/发现
 	r.Handle("/api/v1/register", r.ch.ThenFunc(s.Register)).Methods("POST")
 	r.Handle("/api/v1/renew", r.ch.ThenFunc(s.Renew)).Methods("POST")
-	r.Handle("/api/v1/cancel", r.ch.ThenFunc(s.Cancel)).Methods("POST")
+	r.Handle("/api/v1/deregister", r.ch.ThenFunc(s.Deregister)).Methods("POST")
 	r.Handle("/api/v1/fetch", r.ch.ThenFunc(s.Fetch)).Methods("GET")
 	r.Handle("/api/v1/poll", r.ch.ThenFunc(s.Poll)).Methods("GET")
 	// 静态资源

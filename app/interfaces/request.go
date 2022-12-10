@@ -148,7 +148,7 @@ func (r *RegisterReq) CheckRequiredParam() bool {
 	return true
 }
 
-// RenewReq 更新实例
+// RenewReq 服务更新
 type RenewReq struct {
 	Token       string `json:"token"`        // Token 令牌
 	Namespace   string `json:"namespace"`    // 命名空间
@@ -163,15 +163,15 @@ func (r *RenewReq) CheckRequiredParam() bool {
 	return true
 }
 
-// CancelReq 注销实例
-type CancelReq struct {
+// DeregisterReq 服务注销
+type DeregisterReq struct {
 	Token       string `json:"token"`        // Token 令牌
 	Namespace   string `json:"namespace"`    // 命名空间
 	ServiceName string `json:"service_name"` // 服务名称
 	IP          string `json:"ip"`           // 实例IP
 }
 
-func (r *CancelReq) CheckRequiredParam() bool {
+func (r *DeregisterReq) CheckRequiredParam() bool {
 	if r.Token == "" || r.Namespace == "" || r.ServiceName == "" || r.IP == "" {
 		return false
 	}

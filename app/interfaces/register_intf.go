@@ -58,9 +58,9 @@ func (s *MonicaHttpServiceImpl) Renew(w http.ResponseWriter, r *http.Request) {
 	Ok(w, "ok")
 }
 
-// Cancel 服务注销
-func (s *MonicaHttpServiceImpl) Cancel(w http.ResponseWriter, r *http.Request) {
-	req := new(CancelReq)
+// Deregister 服务注销
+func (s *MonicaHttpServiceImpl) Deregister(w http.ResponseWriter, r *http.Request) {
+	req := new(DeregisterReq)
 	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
 		log.ErrorContextf(r.Context(), "call json.Decode failed, err: %v", err)
 		Error(w, errcode.BadRequestParam, "参数解析失败")
@@ -76,7 +76,7 @@ func (s *MonicaHttpServiceImpl) Cancel(w http.ResponseWriter, r *http.Request) {
 		Error(w, errcode.InternalServerError, err.Error())
 		return
 	}
-	if err := s.resv.Cancel(r.Context(), req.Namespace, req.ServiceName, req.IP); err != nil {
+	if err := s.resv.Deregister(r.Context(), req.Namespace, req.ServiceName, req.IP); err != nil {
 		Error(w, errcode.InternalServerError, err.Error())
 	}
 	Ok(w, "ok")
