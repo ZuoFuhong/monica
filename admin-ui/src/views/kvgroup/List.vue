@@ -81,6 +81,7 @@ export default {
   name: "KvGroup",
   created() {
     console.log("init kvgroup page")
+    this.serviceList = []
   },
   data() {
     return {
