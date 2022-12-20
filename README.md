@@ -133,3 +133,7 @@ docker build -t ccr.ccs.tencentyun.com/tcb-xxx-xupz/prod-xxx-online:[tag] .
 # 推送镜像
 docker push ccr.ccs.tencentyun.com/tcb-xxx-xupz/prod-xxxx-online:[tag]
 ```
+
+### License
+
+This project is licensed under the [Apache 2.0 license](https://github.com/ZuoFuhong/monica/blob/master/LICENSE).
