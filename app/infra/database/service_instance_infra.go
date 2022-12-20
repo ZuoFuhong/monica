@@ -45,13 +45,18 @@ func (s *ServiceInstanceRepos) GetAllInstance(ctx context.Context, ns, sname str
 }
 
 func (s *ServiceInstanceRepos) UpdateInstance(ctx context.Context, ins *entity.ServiceInstance) error {
-	if err := s.db.Table(ins.TableName()).Where("id = ? AND deleted_at is null", ins.ID).Updates(map[string]interface{}{
-		"isolate":    ins.Isolate,
-		"weight":     ins.Weight,
-		"metadata":   ins.Metadata,
-		"renewed_at": ins.RenewedAt,
-		"deleted_at": ins.DeletedAt,
-	}).Error; err != nil {
+	values := map[string]interface{}{
+		"isolate":  ins.Isolate,
+		"weight":   ins.Weight,
+		"metadata": ins.Metadata,
+	}
+	if ins.RenewedAt != nil {
+		values["renewed_at"] = ins.RenewedAt
+	}
+	if ins.DeletedAt != nil {
+		values["deleted_at"] = ins.DeletedAt
+	}
+	if err := s.db.Table(ins.TableName()).Where("id = ? AND deleted_at is null", ins.ID).Updates(values).Error; err != nil {
 		log.ErrorContextf(ctx, "call db.Update failed, err: %v", err)
 		return err
 	}

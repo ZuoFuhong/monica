@@ -61,6 +61,8 @@ func (s *Instance) SaveInstance(ctx context.Context, ins *entity.ServiceInstance
 	insDO.Isolate = ins.Isolate
 	insDO.Weight = ins.Weight
 	insDO.Metadata = ins.Metadata
+	// 不负责更新
+	insDO.RenewedAt = nil
 	return s.repos.UpdateInstance(ctx, insDO)
 }
 
