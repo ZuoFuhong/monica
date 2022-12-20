@@ -50,6 +50,7 @@ func (s *ServiceInstanceRepos) UpdateInstance(ctx context.Context, ins *entity.S
 		"weight":     ins.Weight,
 		"metadata":   ins.Metadata,
 		"renewed_at": ins.RenewedAt,
+		"deleted_at": ins.DeletedAt,
 	}).Error; err != nil {
 		log.ErrorContextf(ctx, "call db.Update failed, err: %v", err)
 		return err
